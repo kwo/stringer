@@ -3,6 +3,6 @@ module github.com/kwo/stringer
 go 1.18
 
 require (
-	github.com/go-chi/chi v4.0.2+incompatible
-	golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550
+	github.com/go-chi/chi/v5 v5.0.7
+	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
 )

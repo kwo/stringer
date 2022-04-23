@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 
 	"github.com/kwo/stringer/api/greader"
 	"github.com/kwo/stringer/repository/bogus"
