@@ -16,7 +16,6 @@ type UserInfo struct {
 }
 
 func userinfo() http.HandlerFunc {
-
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		if user := getUserFromContext(ctx); user != nil {
@@ -33,13 +32,11 @@ func userinfo() http.HandlerFunc {
 				http.Error(w, "", http.StatusInternalServerError)
 				return
 			}
-			w.Header().Set(hContentType, mimetypeJson)
+			w.Header().Set(hContentType, mimetypeJSON)
 			_, _ = w.Write(data)
 			return
 		}
 
 		http.Error(w, "", http.StatusUnauthorized)
-
 	}
-
 }

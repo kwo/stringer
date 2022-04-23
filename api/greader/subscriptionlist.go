@@ -73,7 +73,7 @@ func subscriptionList(subscriptionListProvider SubscriptionListProvider) http.Ha
 				return
 			}
 
-			w.Header().Set(hContentType, mimetypeJson)
+			w.Header().Set(hContentType, mimetypeJSON)
 			_, _ = w.Write(data)
 			return
 
@@ -91,7 +91,6 @@ func makeFeedIDs(subscriptions models.Subscriptions) []string {
 }
 
 func makeSubscriptions(subscriptions models.Subscriptions, tags models.Tags, feeds models.Feeds) []Subscription {
-
 	var result []Subscription
 
 	for _, subscription := range subscriptions {
@@ -118,7 +117,6 @@ func makeSubscriptions(subscriptions models.Subscriptions, tags models.Tags, fee
 	}
 
 	return result
-
 }
 
 func makeCategories(tagNames []string, tags models.Tags) []Category {

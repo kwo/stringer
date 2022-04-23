@@ -17,7 +17,6 @@ type TokenAuthenticator interface {
 func authenticate(tokenAuthenticator TokenAuthenticator) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		f := func(w http.ResponseWriter, r *http.Request) {
-
 			ctx := r.Context()
 
 			token := getTokenFromRequest(r)
@@ -36,7 +35,6 @@ func authenticate(tokenAuthenticator TokenAuthenticator) func(http.Handler) http
 
 			ctx = context.WithValue(ctx, ContextKeySessionID, user)
 			next.ServeHTTP(w, r.WithContext(ctx))
-
 		}
 		return http.HandlerFunc(f)
 	}

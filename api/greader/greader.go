@@ -4,18 +4,20 @@ import (
 	"github.com/go-chi/chi"
 )
 
-const ContextKeySessionID = "sessionID"
+type ContextKey string
+
+const ContextKeySessionID ContextKey = "sessionID"
 
 const (
-	authReasonBad         = "BadAuthentication" // login
-	authReasonUnknown     = "Unknown"           // login
-	authTypeGoogle        = "GoogleLogin auth="
-	formkeyUsername       = "Email"  // login
-	formkeyPassword       = "Passwd" // login
-	hAuthorization        = "Authorization"
-	hContentType          = "Content-Type"
-	mimetypeJson          = "application/json"
-	mimetypeText          = "text/plain; charset=utf-8"
+	authReasonBad     = "BadAuthentication" // login
+	authReasonUnknown = "Unknown"           // login
+	authTypeGoogle    = "GoogleLogin auth="
+	formkeyUsername   = "Email"  // login
+	formkeyPassword   = "Passwd" // login
+	hAuthorization    = "Authorization"
+	hContentType      = "Content-Type"
+	mimetypeJSON      = "application/json"
+	// mimetypeText          = "text/plain; charset=utf-8"
 	mimetypeTextNoCharset = "text/plain"
 )
 
@@ -27,7 +29,6 @@ type Provider interface {
 }
 
 func New(provider Provider) *chi.Mux {
-
 	mux := chi.NewMux()
 	mux.Post("/accounts/ClientLogin", login(provider))
 
@@ -36,9 +37,7 @@ func New(provider Provider) *chi.Mux {
 		r.Get("/user-info", userinfo())
 		r.Get("/subscription/list", subscriptionList(provider))
 		r.Get("/stream/items/ids", itemsIDs(provider))
-
 	})
 
 	return mux
-
 }

@@ -17,7 +17,6 @@ import (
 )
 
 func main() {
-
 	bogusProvider := bogus.New()
 	greaderHandler := greader.New(bogusProvider)
 
@@ -63,5 +62,4 @@ func main() {
 	}
 
 	log.Println("exit")
-
 }

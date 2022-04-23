@@ -8,7 +8,6 @@ import (
 )
 
 func TestPasshash(t *testing.T) {
-
 	const testpassword = "world"
 
 	u := &models.User{}
@@ -21,5 +20,4 @@ func TestPasshash(t *testing.T) {
 	if !passhash.MatchPassword(u, testpassword) {
 		t.Error("passwords do not match")
 	}
-
 }

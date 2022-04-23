@@ -27,7 +27,6 @@ type ItemReference struct {
 
 func itemsIDs(itemListProvider ItemListProvider) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		// n            10000
 		// s streamID   user/-/state/com.google/reading-list
 		// xt exclude   user/-/state/com.google/read
@@ -74,31 +73,26 @@ func itemsIDs(itemListProvider ItemListProvider) http.HandlerFunc {
 				return
 			}
 
-			w.Header().Set(hContentType, mimetypeJson)
+			w.Header().Set(hContentType, mimetypeJSON)
 			_, _ = w.Write(data)
 			return
 
 		}
 
 		http.Error(w, "", http.StatusUnauthorized)
-
 	}
 }
 
 func makeItemReferences(items models.Items) []ItemReference {
-
 	var result []ItemReference
 
 	for _, item := range items {
-
 		result = append(result, ItemReference{
 			ID:        item.ID,
 			StreamIDs: []string{},
 			// Timestamp: item.,
 		})
-
 	}
 
 	return result
-
 }

@@ -12,7 +12,6 @@ type LoginAuthenticator interface {
 
 func login(loginAuthenticator LoginAuthenticator) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		if err := r.ParseForm(); err != nil {
 			log.Printf("login: cannot parse form: %s\n", err)
 			sendLoginResponseError(w, "", authReasonUnknown)

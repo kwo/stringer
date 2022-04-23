@@ -35,7 +35,6 @@ func (z *Provider) AuthenticateToken(token string) (*models.User, error) {
 }
 
 func (z *Provider) GetFeeds(feedIDs ...string) (models.Feeds, error) {
-
 	var feeds models.Feeds
 
 	feeds = append(feeds, &models.Feed{
@@ -69,14 +68,12 @@ func (z *Provider) GetFeeds(feedIDs ...string) (models.Feeds, error) {
 	})
 
 	return feeds, nil
-
 }
 
 func (z *Provider) GetSubscriptionsForUser(userID string) (models.Subscriptions, error) {
+	var subscriptions models.Subscriptions
 
-	var subscriptons models.Subscriptions
-
-	subscriptons = append(subscriptons, &models.Subscription{
+	subscriptions = append(subscriptions, &models.Subscription{
 		ID:     "sub/123",
 		UserID: "user/12345",
 		FeedID: "feed/abcde",
@@ -87,7 +84,7 @@ func (z *Provider) GetSubscriptionsForUser(userID string) (models.Subscriptions,
 		Notes:  "notes nzz",
 	})
 
-	subscriptons = append(subscriptons, &models.Subscription{
+	subscriptions = append(subscriptions, &models.Subscription{
 		ID:     "sub/456",
 		UserID: "user/12345",
 		FeedID: "feed/fghij",
@@ -98,7 +95,7 @@ func (z *Provider) GetSubscriptionsForUser(userID string) (models.Subscriptions,
 		Notes:  "notes spiegel",
 	})
 
-	subscriptons = append(subscriptons, &models.Subscription{
+	subscriptions = append(subscriptions, &models.Subscription{
 		ID:     "sub/789",
 		UserID: "user/12345",
 		FeedID: "feed/klmnop",
@@ -109,12 +106,10 @@ func (z *Provider) GetSubscriptionsForUser(userID string) (models.Subscriptions,
 		Notes:  "notes reuters",
 	})
 
-	return subscriptons, nil
-
+	return subscriptions, nil
 }
 
 func (z *Provider) GetTagsForUser(userID string) (models.Tags, error) {
-
 	var tags models.Tags
 
 	tags = append(tags, &models.Tag{
@@ -138,8 +133,7 @@ func (z *Provider) GetItemsUnread(max int) (models.Items, error) {
 func generateToken() (string, error) {
 	c := 16
 	b := make([]byte, c)
-	_, err := rand.Read(b)
-	if err != nil {
+	if _, err := rand.Read(b); err != nil {
 		return "", err
 	}
 	token := hex.EncodeToString(b)
