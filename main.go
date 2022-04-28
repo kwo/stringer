@@ -2,10 +2,9 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"log"
 	"net/http"
-	"os"
 	"os/signal"
 	"syscall"
 	"time"
@@ -17,49 +16,46 @@ import (
 )
 
 func main() {
+	var mainErr error
+	mainCtx, mainCancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer mainCancel()
+
+	// internal service configuration
 	bogusProvider := bogus.New()
 	greaderHandler := greader.New(bogusProvider)
 
+	// httpd configuration
 	handler := chi.NewMux()
-	handler.Mount("/greader", greaderHandler)
+	handler.Mount("/reader", greaderHandler)
 
 	httpd := &http.Server{
-		Addr:    "0.0.0.0:8888",
+		Addr:    "localhost:8888",
 		Handler: handler,
 	}
-
-	ctx, killSwitch := context.WithCancel(context.Background())
-	defer killSwitch()
-
 	go func() {
-		if err := httpd.ListenAndServe(); err != nil {
+		if err := httpd.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Printf("cannot start httpd: %s", err)
-			killSwitch()
+			mainErr = err
+			mainCancel()
 		}
 	}()
-	log.Println("started...")
+	log.Printf("http listening on %s ...", httpd.Addr)
 
-	signals := make(chan os.Signal, 1)
-	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
-	select {
-	case <-signals:
-		fmt.Println()
-		log.Println("caught signal")
-	case <-ctx.Done():
-		log.Println("context cancelled")
+	// initialization complete, wait for shutdown signal
 
-	}
+	<-mainCtx.Done()
 	log.Println("stopping...")
 
-	// TODO: wrap in function
-	dbCtx, dbCancel := context.WithTimeout(context.Background(), time.Second*10)
-	defer dbCancel()
-	if err := httpd.Shutdown(dbCtx); err != nil {
-		log.Printf("error shutting down server: %s", err)
-		if errClose := httpd.Close(); errClose != nil {
-			log.Printf("server close failed: %s", errClose)
-		}
+	// stop httpd
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	if err := httpd.Shutdown(ctx); err != nil {
+		log.Printf("http shutdown error: %s", err)
 	}
 
-	log.Println("exit")
+	// done
+	if mainErr != nil {
+		log.Fatal("done1")
+	}
+	log.Println("done")
 }

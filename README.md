@@ -4,6 +4,13 @@
 
 Feed aggregator to work with Reeder app.
 
+## Testing
+
+Start app - runs on port 8888
+Start mitmproxy --mode reverse:http://localhost:8888 -p 4444
+Add account to Reeder (Reader, self-hosted Google Reader API) Server: http://localhost:8888, username: hello, password: world
+
+
 ## Current Problem
 
 Item IDs
